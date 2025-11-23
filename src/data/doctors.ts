@@ -141,4 +141,24 @@ export const doctorsData: Record<string, Doctor[]> = {
             about: "Dr. Elizabeth Ann Jones specializes in preventive pediatrics and pediatric health management."
         },
     ],
+    orthopedics: [
+        {
+            id: "michael-johnson",
+            name: "Dr. Michael Johnson",
+            specialty: "Orthopedic Surgeon",
+            workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
+            image: "/images/doctors/ortho_docs/orthodoc1.jpg",
+            experience: "15 Years",
+            about: "Dr. Michael Johnson is a renowned orthopedic surgeon with over 15 years of experience in treating complex skin conditions."
+        },
+        {
+            id: "joe-smith",
+            name: "Dr. Joe Smith",
+            specialty: "Orthopedic Surgeon",
+            workdays: "Tuesday and Wednesday from 1pm to 5pm",
+            image: "/images/doctors/ortho_docs/orthodoc2.webp",
+            experience: "10 Years",
+            about: "Dr. Joe Smith specializes in preventive orthopedic surgery and orthopedic health management."
+        },
+    ],
 };
