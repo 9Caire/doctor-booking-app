@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { doctorsData } from "@/data/doctors";
 import { useRouter, useParams } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 
 export default function DoctorsListPage() {
     const params = useParams();
@@ -15,8 +16,20 @@ export default function DoctorsListPage() {
     return (
         <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-6xl">
+                <div>
+                    {/* Breadcrumb / Back */}
+                    <div className="mb-6">
+                        <button
+                            onClick={() => router.back()}
+                            className="text-gray-500 hover:text-gray-700 flex items-center gap-2 text-sm"
+                        >
+                            <ChevronLeft className="w-4 h-4" /> Back to home
+                        </button>
+                    </div>
+
+                </div>
                 <h1 className="text-3xl font-semibold text-gray-800 mb-8 capitalize text-center">
-                    Pediatrics Specialists
+                    Dermatology Specialists
                 </h1>
 
                 {doctors.length === 0 ? (
