@@ -7,6 +7,7 @@ import { doctorsData } from "@/data/doctors";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Modal } from "@/components/ui/modal";
 
 // Mock slots data generator
 const generateSlots = () => {
@@ -35,7 +36,8 @@ export default function BookingPage() {
     const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
 
     // Generate next 7 days
-    const dates = Array.from({ length: 7 }, (_, i) => {
+    // Generate next 7 days
+    const [dates] = useState(() => Array.from({ length: 7 }, (_, i) => {
         const d = new Date();
         d.setDate(d.getDate() + i);
         return {
@@ -44,7 +46,7 @@ export default function BookingPage() {
             fullDate: d,
             slots: generateSlots() // In a real app, this would come from an API based on date
         };
-    });
+    }));
 
     if (!doctor) {
         return (
@@ -56,6 +58,38 @@ export default function BookingPage() {
             </div>
         );
     }
+
+    // Modal & Form State
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [userDetails, setUserDetails] = useState({
+        fullName: "",
+        phone: "",
+        otp: "",
+        email: ""
+    });
+    const [showOtpInput, setShowOtpInput] = useState(false);
+
+    const handleConfirmClick = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleVerifyAndProceed = () => {
+        // Mock verification
+        if (userDetails.otp === "1234") { // Mock OTP
+            router.push(`/doctors/book/${id}/payment?date=${dates[selectedDate].fullDate.toISOString()}&slot=${selectedSlot}&amount=1000`);
+        } else {
+            alert("Invalid OTP. Use 1234");
+        }
+    };
+
+    const handleSendOtp = () => {
+        if (userDetails.phone.length >= 10) {
+            setShowOtpInput(true);
+            alert("OTP sent: 1234");
+        } else {
+            alert("Please enter a valid phone number");
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
@@ -177,6 +211,7 @@ export default function BookingPage() {
 
                                 <Button
                                     disabled={!selectedSlot}
+                                    onClick={handleConfirmClick}
                                     className="w-full sm:w-auto bg-[#28a99e] hover:bg-[#1f857c] text-white px-8 py-6 text-lg h-auto"
                                 >
                                     Confirm Booking
@@ -187,6 +222,79 @@ export default function BookingPage() {
                     </div>
                 </div>
             </div>
+
+            {/* User Details Modal */}
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <div className="text-center mb-6">
+                    <h2 className="text-xl font-bold text-gray-800">Enter Details</h2>
+                    <p className="text-sm text-gray-500">Please provide your details to proceed.</p>
+                </div>
+
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Full Name</label>
+                        <input
+                            type="text"
+                            className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                            placeholder="John Doe"
+                            value={userDetails.fullName}
+                            onChange={(e) => setUserDetails({ ...userDetails, fullName: e.target.value })}
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Phone Number</label>
+                        <div className="flex gap-2">
+                            <input
+                                type="tel"
+                                className="flex-1 p-2 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                                placeholder="1234567890"
+                                value={userDetails.phone}
+                                onChange={(e) => setUserDetails({ ...userDetails, phone: e.target.value })}
+                            />
+                            {!showOtpInput && (
+                                <Button onClick={handleSendOtp} className="bg-gray-800 text-white whitespace-nowrap">
+                                    Send OTP
+                                </Button>
+                            )}
+                        </div>
+                    </div>
+
+                    {showOtpInput && (
+                        <div className="animate-in fade-in slide-in-from-top-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Enter OTP</label>
+                            <input
+                                type="text"
+                                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none tracking-widest text-center font-mono"
+                                placeholder="0000"
+                                maxLength={4}
+                                value={userDetails.otp}
+                                onChange={(e) => setUserDetails({ ...userDetails, otp: e.target.value })}
+                            />
+                            <p className="text-xs text-gray-500 mt-1 text-right">Use 1234 as OTP</p>
+                        </div>
+                    )}
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Email (Optional)</label>
+                        <input
+                            type="email"
+                            className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                            placeholder="john@example.com"
+                            value={userDetails.email}
+                            onChange={(e) => setUserDetails({ ...userDetails, email: e.target.value })}
+                        />
+                    </div>
+
+                    <Button
+                        className="w-full mt-4 bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg"
+                        disabled={!showOtpInput || userDetails.otp.length !== 4 || !userDetails.fullName}
+                        onClick={handleVerifyAndProceed}
+                    >
+                        Verify & Proceed
+                    </Button>
+                </div>
+            </Modal>
         </div>
     );
 }
