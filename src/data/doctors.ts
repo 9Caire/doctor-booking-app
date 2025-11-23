@@ -92,4 +92,53 @@ export const doctorsData: Record<string, Doctor[]> = {
             about: "Dr. Aasmaan Singh is a young and dynamic cardiologist with a passion for community health."
         },
     ],
+    dermatology: [
+        {
+            id: "sunita-smith",
+            name: "Dr. Sunita Smith",
+            specialty: "Dermatologist",
+            workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
+            image: "/images/doctors/derm_docs/dermdoc1.jpg",
+            experience: "15 Years",
+            about: "Dr. Sunita Smith is a renowned dermatologist with over 15 years of experience in treating complex skin conditions."
+        },
+        {
+            id: "ann-chovey",
+            name: "Dr. Ann Chovey",
+            specialty: "Dermatologist",
+            workdays: "Tuesday and Wednesday from 1pm to 5pm",
+            image: "/images/doctors/derm_docs/dermdoc4.jpg",
+            experience: "10 Years",
+            about: "Dr. Ann Chovey specializes in preventive dermatology and skin health management."
+        },
+        {
+            id: "anita-bath",
+            name: "Dr. Anita Bath",
+            specialty: "Dermatologist",
+            workdays: "Saturday and Sunday from 5pm to 7pm",
+            image: "/images/doctors/derm_docs/dermdoc5.jpg",
+            experience: "8 Years",
+            about: "Dr. Anita Bath is dedicated to providing comprehensive dermatological care with a patient-centric approach."
+        },
+    ],
+    pediatrics: [
+        {
+            id: "bell-buttons",
+            name: "Dr. Bell E. Buttons",
+            specialty: "Pediatrician",
+            workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
+            image: "/images/doctors/pedia_docs/pediadoc1.jpg",
+            experience: "15 Years",
+            about: "Dr. Bell E. Buttons is a renowned pediatrician with over 15 years of experience in treating complex skin conditions."
+        },
+        {
+            id: "elizabeth-jones",
+            name: "Dr. Elizabeth Ann Jones",
+            specialty: "Pediatrician",
+            workdays: "Tuesday and Wednesday from 1pm to 5pm",
+            image: "/images/doctors/pedia_docs/pediadoc2.jpg",
+            experience: "10 Years",
+            about: "Dr. Elizabeth Ann Jones specializes in preventive pediatrics and pediatric health management."
+        },
+    ],
 };

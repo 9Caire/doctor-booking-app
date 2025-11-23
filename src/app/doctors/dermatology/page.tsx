@@ -1,62 +1,14 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-
-const doctorsData = {
-  dermatology: [
-    {
-      name: "Dr. Rohan Mehta",
-      workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
-      image: "/images/doctors/doctor4.jpg",
-    },
-    {
-      name: "Dr. Kavita Rao",
-      workdays: "Tuesday and Wednesday from 1pm to 5pm",
-      image: "/images/doctors/doctor2.webp",
-    },
-    {
-      name: "Dr. Sameer Khanna",
-      workdays: "Saturday and Sunday from 5pm to 7pm",
-      image: "/images/doctors/doctor3.jpg",
-    },
-    {
-      name: "Dr. Rahul Kumar",
-      workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
-      image: "/images/doctors/doctor5.avif",
-    },
-    {
-      name: "Dr. Mason Ray",
-      workdays: "Tuesday and Wednesday from 1pm to 5pm",
-      image: "/images/doctors/doctor6.jpg",
-    },
-    {
-      name: "Dr. Karishma Khanna",
-      workdays: "Saturday and Sunday from 5pm to 7pm",
-      image: "/images/doctors/doctor7.jpg",
-    },
-    {
-      name: "Dr. Eley Toney",
-      workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
-      image: "/images/doctors/doctor8.jpg",
-    },
-    {
-      name: "Dr. Kristina Liao",
-      workdays: "Tuesday and Wednesday from 1pm to 5pm",
-      image: "/images/doctors/doctor9.jpg",
-    },
-    {
-      name: "Dr. Aasmaan Singh",
-      workdays: "Saturday and Sunday from 5pm to 7pm",
-      image: "/images/doctors/doctor3.jpg",
-    },
-  ],
-};
+import { doctorsData } from "@/data/doctors";
+import { useRouter, useParams } from "next/navigation";
 
 export default function DoctorsListPage() {
   const params = useParams();
+  const router = useRouter();
   const specialty = (params?.specialty as string)?.toLowerCase();
   const doctors = doctorsData.dermatology || [];
 
@@ -78,19 +30,20 @@ export default function DoctorsListPage() {
                 key={doc.name}
                 className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-6 flex flex-col items-center text-center"
               >
-                <div className="w-50 h-50 relative mb-4">
+                <div className="w-50 relative mb-4 aspect-square overflow-hidden rounded-full">
                   <Image
                     src={doc.image}
                     alt={doc.name}
                     fill
-                    className="object-cover rounded-full"
+                    className="object-cover object-center"
                   />
                 </div>
+
                 <h3 className="text-xl font-medium text-gray-800">{doc.name}</h3>
                 <p className="text-sm text-gray-500 mt-1 mb-4">
                   {doc.workdays}
                 </p>
-                <Button className="bg-[#28a99e] hover:bg-blue-700 text-white">
+                <Button className="bg-[#28a99e] hover:bg-blue-700 text-white" onClick={() => router.push(`/doctors/book/${doc.id}`)}>
                   Book Now
                 </Button>
               </li>
