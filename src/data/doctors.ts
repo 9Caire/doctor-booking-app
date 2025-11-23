@@ -64,33 +64,6 @@ export const doctorsData: Record<string, Doctor[]> = {
             experience: "9 Years",
             about: "Dr. Karishma Khanna focuses on women's heart health and non-invasive cardiology."
         },
-        {
-            id: "eley-toney",
-            name: "Dr. Eley Toney",
-            specialty: "Cardiologist",
-            workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
-            image: "/images/doctors/doctor8.jpg",
-            experience: "14 Years",
-            about: "Dr. Eley Toney is committed to delivering high-quality cardiac care using the latest technologies."
-        },
-        {
-            id: "kristina-liao",
-            name: "Dr. Kristina Liao",
-            specialty: "Cardiologist",
-            workdays: "Tuesday and Wednesday from 1pm to 5pm",
-            image: "/images/doctors/doctor9.jpg",
-            experience: "11 Years",
-            about: "Dr. Kristina Liao specializes in pediatric cardiology and congenital heart defects."
-        },
-        {
-            id: "aasmaan-singh",
-            name: "Dr. Aasmaan Singh",
-            specialty: "Cardiologist",
-            workdays: "Saturday and Sunday from 5pm to 7pm",
-            image: "/images/doctors/doctor3.jpg",
-            experience: "7 Years",
-            about: "Dr. Aasmaan Singh is a young and dynamic cardiologist with a passion for community health."
-        },
     ],
     dermatology: [
         {
@@ -159,6 +132,35 @@ export const doctorsData: Record<string, Doctor[]> = {
             image: "/images/doctors/ortho_docs/orthodoc2.webp",
             experience: "10 Years",
             about: "Dr. Joe Smith specializes in preventive orthopedic surgery and orthopedic health management."
+        },
+    ],
+    pyschiatry: [
+        {
+            id: "eley-toney",
+            name: "Dr. Eley Toney",
+            specialty: "Psychiatrist",
+            workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
+            image: "/images/doctors/doctor8.jpg",
+            experience: "14 Years",
+            about: "Dr. Eley Toney is committed to delivering high-quality psychiatric care using the latest technologies."
+        },
+        {
+            id: "kristina-liao",
+            name: "Dr. Kristina Liao",
+            specialty: "Psychiatrist",
+            workdays: "Tuesday and Wednesday from 1pm to 5pm",
+            image: "/images/doctors/doctor9.jpg",
+            experience: "11 Years",
+            about: "Dr. Kristina Liao specializes in pediatric psychiatry and congenital heart defects."
+        },
+        {
+            id: "aasmaan-singh",
+            name: "Dr. Aasmaan Singh",
+            specialty: "Psychiatrist",
+            workdays: "Saturday and Sunday from 5pm to 7pm",
+            image: "/images/doctors/doctor3.jpg",
+            experience: "7 Years",
+            about: "Dr. Aasmaan Singh is a young and dynamic psychiatrist with a passion for community health."
         },
     ],
 };
