@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { doctorsData } from "@/data/doctors";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, CheckCircle2, XCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle2, XCircle, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Modal } from "@/components/ui/modal";
 
@@ -36,7 +36,6 @@ export default function BookingPage() {
     const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
 
     // Generate next 7 days
-    // Generate next 7 days
     const [dates] = useState(() => Array.from({ length: 7 }, (_, i) => {
         const d = new Date();
         d.setDate(d.getDate() + i);
@@ -48,6 +47,95 @@ export default function BookingPage() {
         };
     }));
 
+    // Modal & Form State
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Steps: PHONE -> OTP -> (SIGNUP) -> PATIENT_DETAILS
+    type Step = 'PHONE' | 'OTP' | 'SIGNUP' | 'PATIENT_DETAILS';
+    const [currentStep, setCurrentStep] = useState<Step>('PHONE');
+
+    const [userDetails, setUserDetails] = useState({
+        // Auth
+        phone: "",
+        otp: "",
+        fullName: "", // Account Holder Name
+        email: "",
+
+        // Patient Details
+        patientName: "",
+        patientAge: "",
+        patientGender: "", // 'male' | 'female' | 'other'
+        contactNumber: "" // Defaults to auth phone
+    });
+
+    // Mock User Database check
+    const checkUserExists = (phone: string) => {
+        // Mock: Only "9999999999" exists
+        return phone === "9999999999";
+    };
+
+    const handleConfirmClick = () => {
+        setIsModalOpen(true);
+        setCurrentStep('PHONE'); // Always start fresh for now
+        // In real app, check if already logged in
+    };
+
+    const handleSendOtp = () => {
+        if (userDetails.phone.length >= 10) {
+            // Mock sending OTP
+            alert("OTP sent: 1234");
+            setCurrentStep('OTP');
+        } else {
+            alert("Please enter a valid phone number");
+        }
+    };
+
+    const handleVerifyOtp = () => {
+        if (userDetails.otp === "1234") {
+            // Check if user exists
+            const exists = checkUserExists(userDetails.phone);
+            if (exists) {
+                // Pre-fill contact number for patient details
+                setUserDetails(prev => ({ ...prev, contactNumber: prev.phone }));
+                setCurrentStep('PATIENT_DETAILS');
+            } else {
+                setCurrentStep('SIGNUP');
+            }
+        } else {
+            alert("Invalid OTP. Use 1234");
+        }
+    };
+
+    const handleSignUp = () => {
+        if (userDetails.fullName && userDetails.email) {
+            // Create account logic here
+            // Pre-fill contact number for patient details
+            setUserDetails(prev => ({ ...prev, contactNumber: prev.phone }));
+            setCurrentStep('PATIENT_DETAILS');
+        } else {
+            alert("Please fill in all fields");
+        }
+    };
+
+    const handlePatientDetailsSubmit = () => {
+        if (userDetails.patientName && userDetails.patientAge && userDetails.patientGender && userDetails.contactNumber) {
+            // Proceed to payment
+            const queryParams = new URLSearchParams({
+                date: dates[selectedDate].fullDate.toISOString(),
+                slot: selectedSlot!,
+                amount: "1000",
+                patientName: userDetails.patientName,
+                patientAge: userDetails.patientAge,
+                patientGender: userDetails.patientGender,
+                contactNumber: userDetails.contactNumber
+            }).toString();
+
+            router.push(`/doctors/book/${id}/payment?${queryParams}`);
+        } else {
+            alert("Please fill in all patient details");
+        }
+    };
+
     if (!doctor) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -58,38 +146,6 @@ export default function BookingPage() {
             </div>
         );
     }
-
-    // Modal & Form State
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [userDetails, setUserDetails] = useState({
-        fullName: "",
-        phone: "",
-        otp: "",
-        email: ""
-    });
-    const [showOtpInput, setShowOtpInput] = useState(false);
-
-    const handleConfirmClick = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleVerifyAndProceed = () => {
-        // Mock verification
-        if (userDetails.otp === "1234") { // Mock OTP
-            router.push(`/doctors/book/${id}/payment?date=${dates[selectedDate].fullDate.toISOString()}&slot=${selectedSlot}&amount=1000`);
-        } else {
-            alert("Invalid OTP. Use 1234");
-        }
-    };
-
-    const handleSendOtp = () => {
-        if (userDetails.phone.length >= 10) {
-            setShowOtpInput(true);
-            alert("OTP sent: 1234");
-        } else {
-            alert("Please enter a valid phone number");
-        }
-    };
 
     return (
         <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
@@ -119,6 +175,13 @@ export default function BookingPage() {
                             <h1 className="text-2xl font-bold text-gray-800">{doctor.name}</h1>
                             <p className="text-[#28a99e] font-medium mt-1">{doctor.specialty}</p>
                             <p className="text-gray-500 text-sm mt-2">{doctor.experience} Experience</p>
+
+                            <div className="flex items-center gap-2 mt-3 bg-gray-50 px-3 py-1.5 rounded-full">
+                                <Globe className="w-3.5 h-3.5 text-gray-500" />
+                                <p className="text-xs font-medium text-gray-600">
+                                    {doctor.languages.join(", ")}
+                                </p>
+                            </div>
 
                             <div className="w-full mt-6 border-t pt-6 text-left">
                                 <h3 className="font-semibold text-gray-700 mb-2">About</h3>
@@ -223,77 +286,173 @@ export default function BookingPage() {
                 </div>
             </div>
 
-            {/* User Details Modal */}
+            {/* Multi-step Modal */}
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <div className="text-center mb-6">
-                    <h2 className="text-xl font-bold text-gray-800">Enter Details</h2>
-                    <p className="text-sm text-gray-500">Please provide your details to proceed.</p>
-                </div>
 
-                <div className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Full Name</label>
-                        <input
-                            type="text"
-                            className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
-                            placeholder="John Doe"
-                            value={userDetails.fullName}
-                            onChange={(e) => setUserDetails({ ...userDetails, fullName: e.target.value })}
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Phone Number</label>
-                        <div className="flex gap-2">
+                {/* Step 1: Phone Number */}
+                {currentStep === 'PHONE' && (
+                    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                        <div className="text-center mb-6">
+                            <h2 className="text-xl font-bold text-gray-800">Sign In</h2>
+                            <p className="text-sm text-gray-500">Enter your phone number to continue</p>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                             <input
                                 type="tel"
-                                className="flex-1 p-2 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
-                                placeholder="1234567890"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition"
+                                placeholder="9876543210"
                                 value={userDetails.phone}
                                 onChange={(e) => setUserDetails({ ...userDetails, phone: e.target.value })}
                             />
-                            {!showOtpInput && (
-                                <Button onClick={handleSendOtp} className="bg-gray-800 text-white whitespace-nowrap">
-                                    Send OTP
-                                </Button>
-                            )}
                         </div>
+                        <Button
+                            className="w-full bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg"
+                            onClick={handleSendOtp}
+                            disabled={userDetails.phone.length < 10}
+                        >
+                            Get OTP
+                        </Button>
                     </div>
+                )}
 
-                    {showOtpInput && (
-                        <div className="animate-in fade-in slide-in-from-top-2">
-                            <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Enter OTP</label>
+                {/* Step 2: OTP */}
+                {currentStep === 'OTP' && (
+                    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                        <div className="text-center mb-6">
+                            <h2 className="text-xl font-bold text-gray-800">Verify OTP</h2>
+                            <p className="text-sm text-gray-500">Enter the 4-digit code sent to {userDetails.phone}</p>
+                        </div>
+                        <div>
                             <input
                                 type="text"
-                                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none tracking-widest text-center font-mono"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none text-center text-2xl tracking-[0.5em] font-mono"
                                 placeholder="0000"
                                 maxLength={4}
                                 value={userDetails.otp}
                                 onChange={(e) => setUserDetails({ ...userDetails, otp: e.target.value })}
                             />
-                            <p className="text-xs text-gray-500 mt-1 text-right">Use 1234 as OTP</p>
+                            <div className="flex justify-between mt-2 text-xs">
+                                <span className="text-gray-500">Use 1234 as OTP</span>
+                                <button onClick={() => setCurrentStep('PHONE')} className="text-[#28a99e] hover:underline">Change Number</button>
+                            </div>
                         </div>
-                    )}
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1 text-left">Email (Optional)</label>
-                        <input
-                            type="email"
-                            className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
-                            placeholder="john@example.com"
-                            value={userDetails.email}
-                            onChange={(e) => setUserDetails({ ...userDetails, email: e.target.value })}
-                        />
+                        <Button
+                            className="w-full bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg"
+                            onClick={handleVerifyOtp}
+                            disabled={userDetails.otp.length !== 4}
+                        >
+                            Verify
+                        </Button>
                     </div>
+                )}
 
-                    <Button
-                        className="w-full mt-4 bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg"
-                        disabled={!showOtpInput || userDetails.otp.length !== 4 || !userDetails.fullName}
-                        onClick={handleVerifyAndProceed}
-                    >
-                        Verify & Proceed
-                    </Button>
-                </div>
+                {/* Step 3: Sign Up (New User) */}
+                {currentStep === 'SIGNUP' && (
+                    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                        <div className="text-center mb-6">
+                            <h2 className="text-xl font-bold text-gray-800">Create Account</h2>
+                            <p className="text-sm text-gray-500">We need a few details to get you started</p>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                            <input
+                                type="text"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                                placeholder="John Doe"
+                                value={userDetails.fullName}
+                                onChange={(e) => setUserDetails({ ...userDetails, fullName: e.target.value })}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input
+                                type="email"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                                placeholder="john@example.com"
+                                value={userDetails.email}
+                                onChange={(e) => setUserDetails({ ...userDetails, email: e.target.value })}
+                            />
+                        </div>
+                        <Button
+                            className="w-full bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg"
+                            onClick={handleSignUp}
+                            disabled={!userDetails.fullName || !userDetails.email}
+                        >
+                            Create Account
+                        </Button>
+                    </div>
+                )}
+
+                {/* Step 4: Patient Details */}
+                {currentStep === 'PATIENT_DETAILS' && (
+                    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                        <div className="text-center mb-6">
+                            <h2 className="text-xl font-bold text-gray-800">Patient Details</h2>
+                            <p className="text-sm text-gray-500">Who is this appointment for?</p>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Patient Name</label>
+                            <input
+                                type="text"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                                placeholder="Patient's Full Name"
+                                value={userDetails.patientName}
+                                onChange={(e) => setUserDetails({ ...userDetails, patientName: e.target.value })}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                                <input
+                                    type="number"
+                                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                                    placeholder="25"
+                                    value={userDetails.patientAge}
+                                    onChange={(e) => setUserDetails({ ...userDetails, patientAge: e.target.value })}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                                <select
+                                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none bg-white"
+                                    value={userDetails.patientGender}
+                                    onChange={(e) => setUserDetails({ ...userDetails, patientGender: e.target.value })}
+                                >
+                                    <option value="">Select</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Prefer not to say</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Contact Number</label>
+                            <input
+                                type="tel"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                                placeholder="Contact Number"
+                                value={userDetails.contactNumber}
+                                onChange={(e) => setUserDetails({ ...userDetails, contactNumber: e.target.value })}
+                            />
+                            <p className="text-xs text-gray-500 mt-1">
+                                * This number should belong to someone close to the patient
+                            </p>
+                        </div>
+
+                        <Button
+                            className="w-full bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg mt-2"
+                            onClick={handlePatientDetailsSubmit}
+                            disabled={!userDetails.patientName || !userDetails.patientAge || !userDetails.patientGender || !userDetails.contactNumber}
+                        >
+                            Confirm & Pay
+                        </Button>
+                    </div>
+                )}
+
             </Modal>
         </div>
     );

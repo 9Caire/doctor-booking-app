@@ -5,7 +5,7 @@ import { useParams, useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { doctorsData } from "@/data/doctors";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, CreditCard, Calendar, Clock } from "lucide-react";
+import { ChevronLeft, CreditCard, Calendar, Clock, CheckCircle2 } from "lucide-react";
 
 export default function PaymentPage() {
     const params = useParams();
@@ -16,6 +16,12 @@ export default function PaymentPage() {
     const dateStr = searchParams.get("date");
     const slot = searchParams.get("slot");
     const amount = searchParams.get("amount");
+
+    // Patient Details
+    const patientName = searchParams.get("patientName");
+    const patientAge = searchParams.get("patientAge");
+    const patientGender = searchParams.get("patientGender");
+    const contactNumber = searchParams.get("contactNumber");
 
     const doctor = Object.values(doctorsData)
         .flat()
@@ -28,7 +34,68 @@ export default function PaymentPage() {
         month: 'long'
     });
 
+    const [status, setStatus] = React.useState<'IDLE' | 'PROCESSING' | 'CONFIRMED'>('IDLE');
+
+    const handlePayment = () => {
+        setStatus('PROCESSING');
+        setTimeout(() => {
+            setStatus('CONFIRMED');
+        }, 2000);
+    };
+
     if (!doctor) return null;
+
+    if (status === 'CONFIRMED') {
+        return (
+            <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+                <div className="bg-white rounded-2xl shadow-lg p-8 max-w-lg w-full text-center animate-in zoom-in-95 duration-300">
+                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <CheckCircle2 className="w-10 h-10 text-green-600" />
+                    </div>
+
+                    <h1 className="text-2xl font-bold text-gray-800 mb-2">Booking Confirmed!</h1>
+                    <p className="text-gray-500 mb-8">Your appointment has been successfully scheduled.</p>
+
+                    <div className="bg-gray-50 rounded-xl p-6 text-left space-y-4 mb-8">
+                        <div className="flex items-center gap-4 border-b border-gray-200 pb-4">
+                            <div className="w-12 h-12 relative rounded-full overflow-hidden shrink-0">
+                                <Image
+                                    src={doctor.image}
+                                    alt={doctor.name}
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-gray-800">{doctor.name}</h3>
+                                <p className="text-xs text-[#28a99e]">{doctor.specialty}</p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">Date & Time</p>
+                                <p className="font-medium text-gray-800">{formattedDate}</p>
+                                <p className="font-medium text-gray-800">{slot}</p>
+                            </div>
+                            <div>
+                                <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">Patient</p>
+                                <p className="font-medium text-gray-800">{patientName}</p>
+                                <p className="text-gray-500 text-xs">{patientAge} yrs, {patientGender}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <Button
+                        onClick={() => router.push('/')}
+                        className="w-full bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg"
+                    >
+                        Back to Home
+                    </Button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
@@ -85,42 +152,52 @@ export default function PaymentPage() {
                     </div>
 
                     {/* Right Column: Payment Form */}
-                    <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 h-fit">
+                    <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 h-fit relative overflow-hidden">
+                        {status === 'PROCESSING' && (
+                            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
+                                <div className="w-12 h-12 border-4 border-[#28a99e] border-t-transparent rounded-full animate-spin mb-4"></div>
+                                <p className="text-gray-600 font-medium animate-pulse">Processing Payment...</p>
+                            </div>
+                        )}
+
                         <div className="flex gap-3 mb-6">
                             <button className="flex-1 py-2 px-4 border-2 border-[#28a99e] bg-[#28a99e]/5 text-[#28a99e] font-medium rounded-lg flex items-center justify-center gap-2">
-                                <CreditCard className="w-4 h-4" /> Card
+                                <CreditCard className="w-4 h-4" /> Credit Card
                             </button>
                             <button className="flex-1 py-2 px-4 border border-gray-200 text-gray-500 font-medium rounded-lg hover:bg-gray-50">
-                                UPI / Netbanking
+                                KNET
                             </button>
                         </div>
 
-                        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                        <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handlePayment(); }}>
                             <div>
                                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Cardholder Name</label>
-                                <input type="text" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition" placeholder="John Doe" />
+                                <input type="text" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition" placeholder="John Doe" required />
                             </div>
 
                             <div>
                                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Card Number</label>
                                 <div className="relative">
                                     <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                    <input type="text" className="w-full p-3 pl-10 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition" placeholder="0000 0000 0000 0000" />
+                                    <input type="text" className="w-full p-3 pl-10 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition" placeholder="0000 0000 0000 0000" required />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Expiry</label>
-                                    <input type="text" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition" placeholder="MM/YY" />
+                                    <input type="text" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition" placeholder="MM/YY" required />
                                 </div>
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">CVV</label>
-                                    <input type="password" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition" placeholder="123" maxLength={3} />
+                                    <input type="password" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition" placeholder="123" maxLength={3} required />
                                 </div>
                             </div>
 
-                            <Button className="w-full mt-6 bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg shadow-lg shadow-[#28a99e]/20">
+                            <Button
+                                type="submit"
+                                className="w-full mt-6 bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg shadow-lg shadow-[#28a99e]/20"
+                            >
                                 Pay ${amount}
                             </Button>
                         </form>

@@ -6,6 +6,7 @@ export interface Doctor {
     image: string;
     experience: string;
     about: string;
+    languages: string[];
 }
 
 export const doctorsData: Record<string, Doctor[]> = {
@@ -17,7 +18,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
             image: "/images/doctors/doctor4.jpg",
             experience: "15 Years",
-            about: "Dr. Rohan Mehta is a renowned cardiologist with over 15 years of experience in treating complex heart conditions."
+            about: "Dr. Rohan Mehta is a renowned cardiologist with over 15 years of experience in treating complex heart conditions.",
+            languages: ["English", "Arabic"]
         },
         {
             id: "kavita-rao",
@@ -26,7 +28,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Tuesday and Wednesday from 1pm to 5pm",
             image: "/images/doctors/doctor2.webp",
             experience: "10 Years",
-            about: "Dr. Kavita Rao specializes in preventive cardiology and heart health management."
+            about: "Dr. Kavita Rao specializes in preventive cardiology and heart health management.",
+            languages: ["English"]
         },
         {
             id: "sameer-khanna",
@@ -35,7 +38,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Saturday and Sunday from 5pm to 7pm",
             image: "/images/doctors/doctor3.jpg",
             experience: "8 Years",
-            about: "Dr. Sameer Khanna is dedicated to providing comprehensive cardiac care with a patient-centric approach."
+            about: "Dr. Sameer Khanna is dedicated to providing comprehensive cardiac care with a patient-centric approach.",
+            languages: ["English", "Arabic"]
         },
         {
             id: "rahul-kumar",
@@ -44,7 +48,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
             image: "/images/doctors/doctor5.avif",
             experience: "12 Years",
-            about: "Dr. Rahul Kumar has extensive experience in interventional cardiology."
+            about: "Dr. Rahul Kumar has extensive experience in interventional cardiology.",
+            languages: ["English"]
         },
         {
             id: "mason-ray",
@@ -53,7 +58,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Tuesday and Wednesday from 1pm to 5pm",
             image: "/images/doctors/doctor6.jpg",
             experience: "20 Years",
-            about: "Dr. Mason Ray is a senior cardiologist known for his expertise in heart failure management."
+            about: "Dr. Mason Ray is a senior cardiologist known for his expertise in heart failure management.",
+            languages: ["English", "Arabic"]
         },
         {
             id: "karishma-khanna",
@@ -62,7 +68,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Saturday and Sunday from 5pm to 7pm",
             image: "/images/doctors/doctor7.jpg",
             experience: "9 Years",
-            about: "Dr. Karishma Khanna focuses on women's heart health and non-invasive cardiology."
+            about: "Dr. Karishma Khanna focuses on women's heart health and non-invasive cardiology.",
+            languages: ["English"]
         },
     ],
     dermatology: [
@@ -73,7 +80,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
             image: "/images/doctors/derm_docs/dermdoc1.jpg",
             experience: "15 Years",
-            about: "Dr. Sunita Smith is a renowned dermatologist with over 15 years of experience in treating complex skin conditions."
+            about: "Dr. Sunita Smith is a renowned dermatologist with over 15 years of experience in treating complex skin conditions.",
+            languages: ["English", "Arabic"]
         },
         {
             id: "ann-chovey",
@@ -82,7 +90,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Tuesday and Wednesday from 1pm to 5pm",
             image: "/images/doctors/derm_docs/dermdoc4.jpg",
             experience: "10 Years",
-            about: "Dr. Ann Chovey specializes in preventive dermatology and skin health management."
+            about: "Dr. Ann Chovey specializes in preventive dermatology and skin health management.",
+            languages: ["English"]
         },
         {
             id: "anita-bath",
@@ -91,7 +100,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Saturday and Sunday from 5pm to 7pm",
             image: "/images/doctors/derm_docs/dermdoc5.jpg",
             experience: "8 Years",
-            about: "Dr. Anita Bath is dedicated to providing comprehensive dermatological care with a patient-centric approach."
+            about: "Dr. Anita Bath is dedicated to providing comprehensive dermatological care with a patient-centric approach.",
+            languages: ["English", "Arabic"]
         },
     ],
     pediatrics: [
@@ -102,7 +112,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
             image: "/images/doctors/pedia_docs/pediadoc1.jpg",
             experience: "15 Years",
-            about: "Dr. Bell E. Buttons is a renowned pediatrician with over 15 years of experience in treating complex skin conditions."
+            about: "Dr. Bell E. Buttons is a renowned pediatrician with over 15 years of experience in treating complex skin conditions.",
+            languages: ["English"]
         },
         {
             id: "elizabeth-jones",
@@ -111,7 +122,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Tuesday and Wednesday from 1pm to 5pm",
             image: "/images/doctors/pedia_docs/pediadoc2.jpg",
             experience: "10 Years",
-            about: "Dr. Elizabeth Ann Jones specializes in preventive pediatrics and pediatric health management."
+            about: "Dr. Elizabeth Ann Jones specializes in preventive pediatrics and pediatric health management.",
+            languages: ["English", "Arabic"]
         },
     ],
     orthopedics: [
@@ -122,7 +134,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
             image: "/images/doctors/ortho_docs/orthodoc1.jpg",
             experience: "15 Years",
-            about: "Dr. Michael Johnson is a renowned orthopedic surgeon with over 15 years of experience in treating complex skin conditions."
+            about: "Dr. Michael Johnson is a renowned orthopedic surgeon with over 15 years of experience in treating complex skin conditions.",
+            languages: ["English", "Arabic"]
         },
         {
             id: "joe-smith",
@@ -131,7 +144,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Tuesday and Wednesday from 1pm to 5pm",
             image: "/images/doctors/ortho_docs/orthodoc2.webp",
             experience: "10 Years",
-            about: "Dr. Joe Smith specializes in preventive orthopedic surgery and orthopedic health management."
+            about: "Dr. Joe Smith specializes in preventive orthopedic surgery and orthopedic health management.",
+            languages: ["English"]
         },
     ],
     pyschiatry: [
@@ -142,7 +156,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Monday, Tuesday, Wednesday from 6pm to 9pm",
             image: "/images/doctors/doctor8.jpg",
             experience: "14 Years",
-            about: "Dr. Eley Toney is committed to delivering high-quality psychiatric care using the latest technologies."
+            about: "Dr. Eley Toney is committed to delivering high-quality psychiatric care using the latest technologies.",
+            languages: ["English", "Arabic"]
         },
         {
             id: "kristina-liao",
@@ -151,7 +166,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Tuesday and Wednesday from 1pm to 5pm",
             image: "/images/doctors/doctor9.jpg",
             experience: "11 Years",
-            about: "Dr. Kristina Liao specializes in pediatric psychiatry and congenital heart defects."
+            about: "Dr. Kristina Liao specializes in pediatric psychiatry and congenital heart defects.",
+            languages: ["English"]
         },
         {
             id: "aasmaan-singh",
@@ -160,7 +176,8 @@ export const doctorsData: Record<string, Doctor[]> = {
             workdays: "Saturday and Sunday from 5pm to 7pm",
             image: "/images/doctors/doctor3.jpg",
             experience: "7 Years",
-            about: "Dr. Aasmaan Singh is a young and dynamic psychiatrist with a passion for community health."
+            about: "Dr. Aasmaan Singh is a young and dynamic psychiatrist with a passion for community health.",
+            languages: ["English", "Arabic"]
         },
     ],
 };
