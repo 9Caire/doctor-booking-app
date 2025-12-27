@@ -68,7 +68,7 @@ export default function PaymentPage() {
                             </div>
                             <div>
                                 <h3 className="font-bold text-gray-800">{doctor.name}</h3>
-                                <p className="text-xs text-[#28a99e]">{doctor.specialty}</p>
+                                <p className="text-xs text-blue-600">{doctor.specialty}</p>
                             </div>
                         </div>
 
@@ -88,7 +88,7 @@ export default function PaymentPage() {
 
                     <Button
                         onClick={() => router.push('/')}
-                        className="w-full bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg"
+                        className="w-full bg-blue-600 hover-blue-700 text-white py-6 text-lg"
                     >
                         Back to Home
                     </Button>
@@ -129,7 +129,7 @@ export default function PaymentPage() {
                                 </div>
                                 <div>
                                     <h3 className="font-bold text-gray-800">{doctor.name}</h3>
-                                    <p className="text-sm text-[#28a99e]">{doctor.specialty}</p>
+                                    <p className="text-sm text-blue-600">{doctor.specialty}</p>
                                 </div>
                             </div>
 
@@ -146,7 +146,7 @@ export default function PaymentPage() {
 
                             <div className="mt-8 pt-6 border-t flex justify-between items-center">
                                 <span className="text-gray-500">Total Amount</span>
-                                <span className="text-2xl font-bold text-gray-800">${amount}</span>
+                                <span className="text-2xl font-bold text-gray-800">{amount} KD</span>
                             </div>
                         </div>
                     </div>
@@ -155,50 +155,50 @@ export default function PaymentPage() {
                     <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 h-fit relative overflow-hidden">
                         {status === 'PROCESSING' && (
                             <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
-                                <div className="w-12 h-12 border-4 border-[#28a99e] border-t-transparent rounded-full animate-spin mb-4"></div>
+                                <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
                                 <p className="text-gray-600 font-medium animate-pulse">Processing Payment...</p>
                             </div>
                         )}
 
                         <div className="flex gap-3 mb-6">
-                            <button className="flex-1 py-2 px-4 border-2 border-[#28a99e] bg-[#28a99e]/5 text-[#28a99e] font-medium rounded-lg flex items-center justify-center gap-2">
-                                <CreditCard className="w-4 h-4" /> Credit Card
-                            </button>
                             <button className="flex-1 py-2 px-4 border border-gray-200 text-gray-500 font-medium rounded-lg hover:bg-gray-50">
                                 KNET
+                            </button>
+                            <button className="flex-1 py-2 px-4 border-2 border-blue-600 bg-blue-600/5 text-blue-600 font-medium rounded-lg flex items-center justify-center gap-2">
+                                <CreditCard className="w-4 h-4" /> Credit Card
                             </button>
                         </div>
 
                         <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handlePayment(); }}>
                             <div>
                                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Cardholder Name</label>
-                                <input type="text" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition" placeholder="John Doe" required />
+                                <input type="text" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none transition" placeholder="John Doe" required />
                             </div>
 
                             <div>
                                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Card Number</label>
                                 <div className="relative">
                                     <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                    <input type="text" className="w-full p-3 pl-10 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition" placeholder="0000 0000 0000 0000" required />
+                                    <input type="text" className="w-full p-3 pl-10 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none transition" placeholder="0000 0000 0000 0000" required />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Expiry</label>
-                                    <input type="text" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition" placeholder="MM/YY" required />
+                                    <input type="text" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none transition" placeholder="MM/YY" required />
                                 </div>
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">CVV</label>
-                                    <input type="password" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition" placeholder="123" maxLength={3} required />
+                                    <input type="password" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none transition" placeholder="123" maxLength={3} required />
                                 </div>
                             </div>
 
                             <Button
                                 type="submit"
-                                className="w-full mt-6 bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg shadow-lg shadow-[#28a99e]/20"
+                                className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-6 text-lg shadow-lg shadow-blue-600/20"
                             >
-                                Pay ${amount}
+                                Pay {amount} KD
                             </Button>
                         </form>
                     </div>

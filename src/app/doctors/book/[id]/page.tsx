@@ -64,6 +64,7 @@ export default function BookingPage() {
         // Patient Details
         patientName: "",
         patientAge: "",
+        civilId: "",
         patientGender: "", // 'male' | 'female' | 'other'
         contactNumber: "" // Defaults to auth phone
     });
@@ -173,7 +174,7 @@ export default function BookingPage() {
                                 />
                             </div>
                             <h1 className="text-2xl font-bold text-gray-800">{doctor.name}</h1>
-                            <p className="text-[#28a99e] font-medium mt-1">{doctor.specialty}</p>
+                            <p className="text-blue-600 font-medium mt-1">{doctor.specialty}</p>
                             <p className="text-gray-500 text-sm mt-2">{doctor.experience} Experience</p>
 
                             <div className="flex items-center gap-2 mt-3 bg-gray-50 px-3 py-1.5 rounded-full">
@@ -219,7 +220,7 @@ export default function BookingPage() {
                                             dates[selectedDate].date === new Date().getDate() + 1 ? "Tomorrow" :
                                                 `${dates[selectedDate].day}, ${dates[selectedDate].fullDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`}
                                     </p>
-                                    <p className="text-green-600 text-xs font-semibold mt-1">
+                                    <p className="text-blue-600 text-xs font-semibold mt-1">
                                         {dates[selectedDate].slots.filter(s => s.available).length} slots available
                                     </p>
                                 </div>
@@ -247,8 +248,8 @@ export default function BookingPage() {
                                                 !slot.available
                                                     ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed decoration-slice line-through"
                                                     : selectedSlot === slot.time
-                                                        ? "bg-[#28a99e] text-white border-[#28a99e] shadow-md"
-                                                        : "bg-white text-gray-700 border-gray-300 hover:border-[#28a99e] hover:text-[#28a99e]"
+                                                        ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                                                        : "bg-white text-gray-700 border-gray-300 hover:border-blue-600 hover:text-blue-600"
                                             )}
                                         >
                                             {slot.time}
@@ -263,7 +264,7 @@ export default function BookingPage() {
                                     {selectedSlot ? (
                                         <>
                                             <p className="text-sm text-gray-500">Selected Slot</p>
-                                            <p className="text-lg font-bold text-[#28a99e]">
+                                            <p className="text-lg font-bold text-blue-600">
                                                 {selectedSlot} on {dates[selectedDate].day}
                                             </p>
                                         </>
@@ -275,7 +276,7 @@ export default function BookingPage() {
                                 <Button
                                     disabled={!selectedSlot}
                                     onClick={handleConfirmClick}
-                                    className="w-full sm:w-auto bg-[#28a99e] hover:bg-[#1f857c] text-white px-8 py-6 text-lg h-auto"
+                                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg h-auto"
                                 >
                                     Confirm Booking
                                 </Button>
@@ -300,14 +301,14 @@ export default function BookingPage() {
                             <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                             <input
                                 type="tel"
-                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none transition"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-600 outline-none transition"
                                 placeholder="9876543210"
                                 value={userDetails.phone}
                                 onChange={(e) => setUserDetails({ ...userDetails, phone: e.target.value })}
                             />
                         </div>
                         <Button
-                            className="w-full bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-lg"
                             onClick={handleSendOtp}
                             disabled={userDetails.phone.length < 10}
                         >
@@ -326,7 +327,7 @@ export default function BookingPage() {
                         <div>
                             <input
                                 type="text"
-                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none text-center text-2xl tracking-[0.5em] font-mono"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-600 outline-none text-center text-2xl tracking-[0.5em] font-mono"
                                 placeholder="0000"
                                 maxLength={4}
                                 value={userDetails.otp}
@@ -334,11 +335,11 @@ export default function BookingPage() {
                             />
                             <div className="flex justify-between mt-2 text-xs">
                                 <span className="text-gray-500">Use 1234 as OTP</span>
-                                <button onClick={() => setCurrentStep('PHONE')} className="text-[#28a99e] hover:underline">Change Number</button>
+                                <button onClick={() => setCurrentStep('PHONE')} className="text-blue-600 hover:underline">Change Number</button>
                             </div>
                         </div>
                         <Button
-                            className="w-full bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-lg"
                             onClick={handleVerifyOtp}
                             disabled={userDetails.otp.length !== 4}
                         >
@@ -358,7 +359,7 @@ export default function BookingPage() {
                             <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                             <input
                                 type="text"
-                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                                 placeholder="John Doe"
                                 value={userDetails.fullName}
                                 onChange={(e) => setUserDetails({ ...userDetails, fullName: e.target.value })}
@@ -368,14 +369,14 @@ export default function BookingPage() {
                             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                             <input
                                 type="email"
-                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                                 placeholder="john@example.com"
                                 value={userDetails.email}
                                 onChange={(e) => setUserDetails({ ...userDetails, email: e.target.value })}
                             />
                         </div>
                         <Button
-                            className="w-full bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-lg"
                             onClick={handleSignUp}
                             disabled={!userDetails.fullName || !userDetails.email}
                         >
@@ -396,7 +397,7 @@ export default function BookingPage() {
                             <label className="block text-sm font-medium text-gray-700 mb-1">Patient Name</label>
                             <input
                                 type="text"
-                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                                 placeholder="Patient's Full Name"
                                 value={userDetails.patientName}
                                 onChange={(e) => setUserDetails({ ...userDetails, patientName: e.target.value })}
@@ -408,7 +409,7 @@ export default function BookingPage() {
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Age</label>
                                 <input
                                     type="number"
-                                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                                     placeholder="25"
                                     value={userDetails.patientAge}
                                     onChange={(e) => setUserDetails({ ...userDetails, patientAge: e.target.value })}
@@ -417,23 +418,33 @@ export default function BookingPage() {
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
                                 <select
-                                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none bg-white"
+                                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-600 outline-none bg-white"
                                     value={userDetails.patientGender}
                                     onChange={(e) => setUserDetails({ ...userDetails, patientGender: e.target.value })}
                                 >
                                     <option value="">Select</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
-                                    <option value="other">Prefer not to say</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Civil ID of the patient</label>
+                            <input
+                                type="tel"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+                                placeholder="Civil ID"
+                                value={userDetails.civilId}
+                                onChange={(e) => setUserDetails({ ...userDetails, civilId: e.target.value })}
+                            />
                         </div>
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Contact Number</label>
                             <input
                                 type="tel"
-                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#28a99e] outline-none"
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                                 placeholder="Contact Number"
                                 value={userDetails.contactNumber}
                                 onChange={(e) => setUserDetails({ ...userDetails, contactNumber: e.target.value })}
@@ -444,7 +455,7 @@ export default function BookingPage() {
                         </div>
 
                         <Button
-                            className="w-full bg-[#28a99e] hover:bg-[#1f857c] text-white py-6 text-lg mt-2"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-lg mt-2"
                             onClick={handlePatientDetailsSubmit}
                             disabled={!userDetails.patientName || !userDetails.patientAge || !userDetails.patientGender || !userDetails.contactNumber}
                         >
